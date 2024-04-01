@@ -28,10 +28,6 @@ function addNewData(data) {
     show_page();
 };
 
-
-
-//cur_pages = 1, return the function
-// cur_pages = last page, return the function
 function Del_ALL_Row () {
     var myTable = document.getElementById("csie");
     while (myTable.rows.length > 1) {
@@ -67,13 +63,10 @@ function filterData(search) {
     Del_ALL_Row();
     var regex = new RegExp(search, 'i');
     dataset_filter = dataset.filter(function (data) {
-        return regex.test(data["title"]) ||
-                regex.test(data["showInfo"][0]["locationName"]) ||
-                regex.test(data["descriptionFilterHtml"]);
+        return regex.test(data["title"]);
     });
     console.log(dataset_filter.length);
     total_pages = Math.ceil(dataset_filter.length / 10);
     cur_pages = 1;
     addNewData(dataset_filter);
-}
-// ----------------------search----------------------
+};
