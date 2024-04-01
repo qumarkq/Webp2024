@@ -4,6 +4,7 @@ var xhr = new XMLHttpRequest();
 xhr.open('GET', openUrl, true);
 xhr.send();
 var total_pages = 0;
+var dataset_filter = [];
 xhr.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
         dataset = JSON.parse(this.responseText);
@@ -14,14 +15,15 @@ xhr.onreadystatechange = function () {
 };
 
 var cur_pages = 1;
-function addNewData(dataset) {
+function addNewData(data) {
+    console.log("add New cur_pages: " + cur_pages);
     var myTable = document.getElementById("csie");
-    var dataset_slice = dataset.slice(((cur_pages) - 1) * 10, cur_pages * 10);
-    dataset_slice.forEach(function (dataset) {
+    var data_slice = data.slice(((cur_pages) - 1) * 10, cur_pages * 10);
+    data_slice.forEach(function (data) {
         var row = myTable.insertRow(-1);
-        row.insertCell(0).innerHTML = dataset["title"];
-        row.insertCell(1).innerHTML = dataset['showInfo'][0]["locationName"];
-        row.insertCell(2).innerHTML = dataset['showInfo'][0]['price'];
+        row.insertCell(0).innerHTML = data["title"];
+        row.insertCell(1).innerHTML = data['showInfo'][0]["locationName"];
+        row.insertCell(2).innerHTML = data['showInfo'][0]['price'];
     });
     show_page();
 };
@@ -42,31 +44,36 @@ function prev_page() {
     }
     Del_ALL_Row();
     cur_pages--;
-    addNewData(dataset);
+    addNewData(dataset_filter);
 };
 
 function next_page() {
     if (cur_pages == total_pages) {
         return;
     }
+    console.log("cur_pages: " + cur_pages);
     Del_ALL_Row();
     cur_pages++;
-    addNewData(dataset);
+    console.log("after cur_pages: " + cur_pages);
+    addNewData(dataset_filter);
 };
 function show_page() {
     var page = document.getElementById("page");
     page.innerHTML = cur_pages + "/" + total_pages + " 頁";
 };
-
 // ----------------------search----------------------
-filter.addEventListener('input', (e) => filterData(e.target.value));
-function filterData(searchTerm) {
+document.getElementById("filter").addEventListener("input", (e) => filterData(e.target.value));
+function filterData(search) {   
     Del_ALL_Row();
-    var dataset_filter = dataset.filter((data) => {
-        return data.title.toLowerCase().includes(searchTerm.toLowerCase());
+    var regex = new RegExp(search, 'i');
+    dataset_filter = dataset.filter(function (data) {
+        return regex.test(data["title"]) ||
+                regex.test(data["showInfo"][0]["locationName"]) ||
+                regex.test(data["descriptionFilterHtml"]);
     });
+    console.log(dataset_filter.length);
     total_pages = Math.ceil(dataset_filter.length / 10);
     cur_pages = 1;
     addNewData(dataset_filter);
-};
+}
 // ----------------------search----------------------
