@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<h1>
+    景點觀光展覽資訊
+</h1>
+<head>
+    <link rel="stylesheet" type="text/css" href="./style.css" href=./style.css>
+    
+</head>
+<body>
+    <!-- <input type="search" class="light-table-filter" data-table="order-table" placeholder="請輸入關鍵字"> -->
+    <table id ="csie" class="table table-striped table-hover">
+        <tr>
+            <th>
+                名稱
+            </th>
+            <th>
+                地點
+            </th>
+            <th>
+                票價
+            </th>
+        </tr>
+    </table>
+    <button onclick="prev_page()">
+        上一頁
+    </button>
+    <p id = "page" class="inline_display"></p>
+    <button onclick="next_page()">
+        下一頁
+    </button>
+    <script src="./control.js"></script>
+</body>
