@@ -30,14 +30,17 @@ function addNewData(dataset) {
 
 //cur_pages = 1, return the function
 // cur_pages = last page, return the function
-function prev_page() {
-    if (cur_pages == 1) {
-        return;
-    }
+function Del_ALL_Row () {
     var myTable = document.getElementById("csie");
     while (myTable.rows.length > 1) {
         myTable.deleteRow(1);
     }
+};
+function prev_page() {
+    if (cur_pages == 1) {
+        return;
+    }
+    Del_ALL_Row();
     cur_pages--;
     addNewData(dataset);
 };
@@ -46,10 +49,7 @@ function next_page() {
     if (cur_pages == total_pages) {
         return;
     }
-    var myTable = document.getElementById("csie");
-    while (myTable.rows.length > 1) {
-        myTable.deleteRow(1);
-    }
+    Del_ALL_Row();
     cur_pages++;
     addNewData(dataset);
 };
@@ -57,3 +57,16 @@ function show_page() {
     var page = document.getElementById("page");
     page.innerHTML = cur_pages + "/" + total_pages + " 頁";
 };
+
+// ----------------------search----------------------
+filter.addEventListener('input', (e) => filterData(e.target.value));
+function filterData(searchTerm) {
+    Del_ALL_Row();
+    var dataset_filter = dataset.filter((data) => {
+        return data.title.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+    total_pages = Math.ceil(dataset_filter.length / 10);
+    cur_pages = 1;
+    addNewData(dataset_filter);
+};
+// ----------------------search----------------------
