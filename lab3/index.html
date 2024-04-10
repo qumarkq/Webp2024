@@ -45,10 +45,15 @@
             function add_new_img(dataset) {
                 var gal = document.getElementById("gallery");
                 dataset.photos.photo.forEach(function (item) {
-                    console.log(item);
                     var img = document.createElement("img");
-                    img.setAttribute("src", 'https://live.staticflickr.com/' + item.server + '/' + item.id + '_' + item.secret + '.jpg');
-
+                    var img_Url ='https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=ca370d51a054836007519a00ff4ce59e&photo_id='+ item.id + '&format=json&nojsoncallback=1';
+                    fetch(img_Url)
+                        .then(response => {
+                            return response.json();
+                        })
+                        .then(data => {
+                            img.src = data.sizes.size[2].source;
+                        });
                     gal.appendChild(img);
                 });
             }
