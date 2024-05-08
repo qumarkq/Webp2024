@@ -52,4 +52,11 @@ Mkfile.old
 dkms.conf
 
 #MacOS files
-.DS_Store
+.DS_Store*
+
+#Webp2024
+build/
+node_modules/
+
+#gitignore
+.gitignore
